@@ -19,7 +19,7 @@ public class CarPostEntity {
     @Column(name = "car-brand")
     private String brand;
     @Column(name = "car-price")
-    private String price;
+    private Double price;
     @Column(name = "car-description")
     private String description;
     @Column(name = "car-engine")
