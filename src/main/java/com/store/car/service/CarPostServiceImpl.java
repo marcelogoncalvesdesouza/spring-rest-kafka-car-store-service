@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -22,8 +23,9 @@ public class CarPostServiceImpl implements CarPostService {
     private OwnerPostRepository ownerPostRepository;
 
     @Override
-    public void newPostDetails(CarPostDTO carPostDTO, Long postId) {
-
+    public void newPostDetails(CarPostDTO carPostDTO) {
+        CarPostEntity carPostEntity = mapCarDTOToEntity(carPostDTO);
+        carPostRepository.save(carPostEntity);
     }
 
     @Override
@@ -53,6 +55,27 @@ public class CarPostServiceImpl implements CarPostService {
     @Override
     public void removeCarSale(Long postId) {
         carPostRepository.deleteById(postId);
+    }
+
+    private CarPostEntity mapCarDTOToEntity(CarPostDTO carPostDTO) {
+        CarPostEntity carPostEntity = new CarPostEntity();
+
+        ownerPostRepository.findById(carPostDTO.getOwnerId()).ifPresentOrElse(item -> {
+            carPostEntity.setOwnerPost(item);
+            carPostEntity.setContact(item.getContactNumber());
+        }, () -> {
+            throw new RuntimeException();
+        });
+
+        carPostEntity.setModel(carPostDTO.getModel());
+        carPostEntity.setBrand(carPostDTO.getBrand());
+        carPostEntity.setPrice(carPostDTO.getPrice());
+        carPostEntity.setCity(carPostDTO.getCity());
+        carPostEntity.setDescription(carPostDTO.getDescription());
+        carPostEntity.setEngineVersion(carPostEntity.getEngineVersion());
+        carPostEntity.setCreateDate(String.valueOf(new Date()));
+
+        return carPostEntity;
     }
 
     private CarPostDTO mapCarEntityToDTO(CarPostEntity carPostEntity) {
