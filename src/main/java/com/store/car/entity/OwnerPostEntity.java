@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "owner_post")
@@ -20,4 +22,6 @@ public class OwnerPostEntity {
     @Column(name = "owner_contact")
     private String contactNumber;
 
+//    @OneToMany(mappedBy = "ownerPostEntity")
+//    private List<CarPostEntity> carPostEntityList = new ArrayList<>();
 }
